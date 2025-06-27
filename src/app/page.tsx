@@ -7,6 +7,7 @@ import FeaturedWork from '@/components/Homepage/FeaturedWork'
 import Services from '@/components/Homepage/Services'
 import Testimonials from '@/components/Homepage/Testimonials'
 import Contact from '@/components/Homepage/Contact'
+import AddProducts from '@/components/Homepage/AddProducts'
 
 const page = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -27,6 +28,7 @@ const page = () => {
       <VideoSection />
       <FeaturedWork />
       <Testimonials />
+      <AddProducts />
       <Contact />
       {/* You can add more sections here as needed */}
       {/* For example, you might want to add a Blog section, a Contact section, etc. */}
