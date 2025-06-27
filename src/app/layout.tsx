@@ -30,12 +30,9 @@ export default function RootLayout({
       <body
 >
         <div className="min-h-screen bg-[#121212] text-[#F5F5F5] font-sans">
-
-          <header>
-            <Header />
-          </header>
-
-
+          
+          <Header />
+          
           <main>{children}</main>
 
           <footer>
