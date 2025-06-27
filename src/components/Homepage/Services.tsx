@@ -1,178 +1,137 @@
 'use client'
-import React from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination, Autoplay } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/pagination'
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from "framer-motion";
 
-interface ImageItem {
-  id: number
-  src: string
-  title: string
-  description: string
-  category: string
-}
+const Services = () => {
 
-interface Props {
-  images: ImageItem[]
-  onImageClick: (image: ImageItem) => void
-}
-
-
-const Services: React.FC<Props> = ({ onImageClick }) => {
-  const photos = [
+  const services = [
     {
-      id: 1,
-      src: "https://readdy.ai/api/search-image?query=professional%20portrait%20photography%20of%20a%20young%20woman%20with%20dramatic%20lighting%20against%20a%20dark%20background%2C%20cinematic%20mood%2C%20shallow%20depth%20of%20field%2C%20high-end%20camera%20quality%2C%20artistic%20composition&width=600&height=800&seq=1&orientation=portrait",
-      title: "Dramatic Portrait",
-      description: "A cinematic portrait with dramatic lighting and mood",
-      category: "portrait"
-    },
-    {
-      id: 2,
-      src: "https://readdy.ai/api/search-image?query=stunning%20landscape%20photography%20of%20mountains%20at%20sunset%20with%20dramatic%20clouds%2C%20golden%20hour%20lighting%2C%20panoramic%20view%2C%20ultra%20high%20definition%2C%20professional%20photography%20with%20perfect%20exposure&width=800&height=500&seq=2&orientation=landscape",
-      title: "Mountain Sunset",
-      description: "Breathtaking mountain landscape captured during golden hour",
-      category: "landscape"
-    },
-    {
-      id: 3,
-      src: "https://readdy.ai/api/search-image?query=urban%20street%20photography%20in%20black%20and%20white%2C%20capturing%20authentic%20city%20life%2C%20people%20walking%2C%20dramatic%20shadows%2C%20high%20contrast%2C%20professional%20documentary%20style%20photography&width=700&height=700&seq=3&orientation=squarish",
-      title: "Urban Life",
-      description: "Authentic street photography capturing the essence of city life",
-      category: "street"
-    },
-    {
-      id: 4,
-      src: "https://readdy.ai/api/search-image?query=abstract%20photography%20with%20colorful%20light%20patterns%2C%20long%20exposure%20photography%2C%20vibrant%20colors%20against%20black%20background%2C%20artistic%20composition%2C%20professional%20studio%20lighting&width=800&height=500&seq=4&orientation=landscape",
-      title: "Light Patterns",
-      description: "Abstract long exposure photography with vibrant colors",
-      category: "abstract"
-    },
-    {
-      id: 5,
-      src: "https://readdy.ai/api/search-image?query=modern%20architecture%20photography%20with%20dramatic%20perspective%2C%20geometric%20patterns%2C%20minimalist%20composition%2C%20perfect%20symmetry%2C%20professional%20architectural%20photography%20with%20dramatic%20lighting&width=600&height=800&seq=5&orientation=portrait",
-      title: "Geometric Architecture",
-      description: "Modern architectural photography highlighting geometric patterns",
-      category: "architecture"
-    },
-    {
-      id: 6,
-      src: "https://readdy.ai/api/search-image?query=close-up%20portrait%20photography%20with%20perfect%20bokeh%2C%20shallow%20depth%20of%20field%2C%20soft%20natural%20lighting%2C%20emotional%20expression%2C%20professional%20portrait%20with%20cinematic%20color%20grading&width=700&height=700&seq=6&orientation=squarish",
-      title: "Emotional Portrait",
-      description: "Intimate portrait capturing genuine emotion with beautiful bokeh",
-      category: "portrait"
-    },
-    {
-      id: 7,
-      src: "https://readdy.ai/api/search-image?query=dramatic%20seascape%20photography%20with%20stormy%20clouds%20and%20crashing%20waves%2C%20long%20exposure%2C%20moody%20atmosphere%2C%20professional%20landscape%20photography%20with%20perfect%20composition&width=800&height=500&seq=7&orientation=landscape",
-      title: "Stormy Seascape",
-      description: "Dramatic seascape with stormy atmosphere and long exposure",
-      category: "landscape"
-    },
-    {
-      id: 8,
-      src: "https://readdy.ai/api/search-image?query=candid%20street%20photography%20capturing%20decisive%20moment%2C%20authentic%20human%20interaction%2C%20perfect%20timing%2C%20documentary%20style%2C%20professional%20street%20photography%20with%20beautiful%20light&width=700&height=700&seq=8&orientation=squarish",
-      title: "Decisive Moment",
-      description: "Candid street photography capturing a perfect moment in time",
-      category: "street"
-    },
-    {
-      id: 9,
-      src: "https://readdy.ai/api/search-image?query=abstract%20macro%20photography%20of%20water%20droplets%20with%20refraction%2C%20extreme%20close-up%2C%20vibrant%20colors%2C%20perfect%20clarity%2C%20professional%20macro%20photography%20with%20creative%20lighting&width=600&height=800&seq=9&orientation=portrait",
-      title: "Water Abstractions",
-      description: "Abstract macro photography exploring water and light",
-      category: "abstract"
-    },
-    {
-      id: 10,
-      src: "https://readdy.ai/api/search-image?query=historic%20architecture%20photography%20in%20dramatic%20black%20and%20white%2C%20perfect%20symmetry%2C%20strong%20contrast%2C%20professional%20architectural%20photography%20with%20beautiful%20composition&width=800&height=500&seq=10&orientation=landscape",
-      title: "Historic Symmetry",
-      description: "Black and white architectural photography highlighting symmetry",
-      category: "architecture"
-    },
-    {
-      id: 11,
-      src: "https://readdy.ai/api/search-image?query=environmental%20portrait%20photography%20of%20an%20artist%20in%20their%20studio%2C%20natural%20lighting%20through%20windows%2C%20authentic%20moment%2C%20professional%20documentary%20portrait%20with%20beautiful%20composition&width=600&height=800&seq=11&orientation=portrait",
-      title: "The Artist",
-      description: "Environmental portrait capturing an artist in their creative space",
-      category: "portrait"
-    },
-    {
-      id: 12,
-      src: "https://readdy.ai/api/search-image?query=aerial%20landscape%20photography%20of%20winding%20river%20through%20forest%2C%20drone%20perspective%2C%20morning%20mist%2C%20golden%20light%2C%20professional%20landscape%20photography%20with%20perfect%20exposure&width=800&height=500&seq=12&orientation=landscape",
-      title: "Aerial Wilderness",
-      description: "Breathtaking aerial view of a winding river through misty forest",
-      category: "landscape"
-    }
+    title: "Corporate Events",
+    description: "Elegant documentation of corporate gatherings, ensuring your brand is represented with sophistication and style.",
+    images: ["/images/corporate1.jpg", "/images/corporate2.jpg", "/images/corporate3.jpg"],
+    cta: "Inquire Now",
+  },
+  {
+    title: "Wedding Photography",
+    description:
+      "Capture your most precious moments with our artistic wedding photography.",
+    images: ["/images/wedding1.jpg", "/images/wedding2.jpg", "/images/wedding3.jpg"],
+    cta: "Book Now",
+  },
+  {
+    title: "Studio Portraits",
+    description:
+      "Stylized studio sessions for professionals, families, and creatives.",
+    images: ["/images/portrait1.jpg", "/images/portrait2.jpg", "/images/portrait3.jpg"],
+    cta: "Schedule Session",
+  },
+  {
+    title: "Event Photography",
+    description:
+      "Dynamic coverage of events, from concerts to conferences, capturing the energy and essence of the moment.",
+    images: ["/images/event1.jpg", "/images/event2.jpg", "/images/event3.jpg"],
+    cta: "Get a Quote",
+  },
+  {
+    title: "Product Photography",
+    description:
+      "High-quality product shots that enhance your brand's visual appeal and drive sales.",
+    images: ["/images/product1.jpg", "/images/product2.jpg", "/images/product3.jpg"],
+    cta: "Contact Us",
+  },
+  // Add more service slides as needed
   ];
+
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % services.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [services.length]);
+
   return (
-    <section className="relative bg-[#111111] bg-gradient-to-b from-[#1a1a1a] via-[#111] to-black py-16 px-4 md:px-12">
-      {/* Optional background vignette */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/60 to-black opacity-60 z-0" />
-
-      <div className="relative z-10 max-w-6xl mx-auto text-white">
-        <h2 className="text-3xl md:text-5xl font-serif font-light mb-8 text-center tracking-wide">
-          Featured Works
-        </h2>
-
-        <Swiper
-          modules={[Pagination, Autoplay]}
-          pagination={{
-            clickable: true,
-            bulletClass: "swiper-pagination-bullet !bg-white/30",
-            bulletActiveClass: "swiper-pagination-bullet-active !bg-white !shadow-md",
-          }}
-          spaceBetween={30}
-          slidesPerView={1}
-          loop
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
-          breakpoints={{
-            768: { slidesPerView: 1.2 },
-            1024: { slidesPerView: 1.5 },
-          }}
-          className="group"
-        >
-          {photos.map((photo, index) => (
-            <SwiperSlide key={index}>
-              <div className="relative overflow-hidden rounded-2xl shadow-lg transition duration-500 hover:shadow-2xl group-hover:scale-[0.98] bg-black/30">
-                {/* Image */}
-                <img
-                  src={photo.src}
-                  alt={photo.title}
-                  className="w-full h-[65vh] object-cover object-center transition duration-700 ease-in-out hover:scale-105 rounded-2xl"
-                />
-
-                {/* Overlay content */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-6 flex flex-col justify-end transition-all duration-700">
-                  <span className="text-xs uppercase text-gray-300 tracking-widest mb-2">
-                    {photo.category}
-                  </span>
-                  <h3 className="text-2xl md:text-3xl font-serif font-semibold text-white mb-2 animate-fadeInUp">
-                    {photo.title}
-                  </h3>
-                  <p className="text-sm text-gray-200 mb-4 animate-fadeInUp delay-150">
-                    {photo.description}
-                  </p>
-
-                  {/* CTA on hover */}
-                  <button className="text-sm text-white/70 hover:text-white underline underline-offset-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-fadeInUp delay-300">
-                    View Details →
-                  </button>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-
-        {/* Swiper pagination styling */}
-        <div className="swiper-pagination mt-8 flex justify-center gap-2"></div>
+    <section className="relative w-full bg-[#f6f2ed] py-15 overflow-hidden">
+      <div className="flex justify-center space-x-2 mb-6">
+        {/* Navigation Buttons */}
+        {services.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrent(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              current === index ? "bg-black scale-110" : "bg-gray-400"
+            }`}
+          ></button>
+        ))}
       </div>
+
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          transition={{ duration: 0.8 }}
+          className="container mx-auto flex flex-col md:flex-row items-center px-6 md:px-12"
+        >
+          {/* Alternating layout */}
+          {current % 2 === 0 ? (
+            <>
+              <ImageGallery images={services[current].images} />
+              <TextContent service={services[current]} />
+            </>
+          ) : (
+            <>
+              <TextContent service={services[current]} />
+              <ImageGallery images={services[current].images} />
+            </>
+          )}
+        </motion.div>
+      </AnimatePresence>
     </section>
-  )
+  );
 }
+
+function ImageGallery({ images }: { images: string[] }) {
+  return (
+    <div className="relative w-full md:w-1/2 h-[400px] flex justify-center items-center mb-8 md:mb-0">
+      {images.map((img, idx) => (
+        <img
+          key={idx}
+          src={img}
+          alt="Service Preview"
+          className={`absolute w-40 h-56 object-cover rounded-xl shadow-lg transition-transform duration-500 ease-in-out 
+            ${idx === 0 ? "z-30 transform -rotate-6 -translate-x-20" : ""}
+            ${idx === 1 ? "z-20 transform rotate-3 translate-x-4" : ""}
+            ${idx === 2 ? "z-10 transform -rotate-2 translate-x-24" : "hidden md:block"}`}
+        />
+      ))}
+    </div>
+  );
+}
+
+function TextContent({
+  service,
+}: {
+  service: { title: string; description: string; cta: string };
+}) {
+  return (
+    <div className="w-full md:w-1/2 text-center md:text-left space-y-6">
+      <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900">
+        {service.title}
+      </h2>
+      <p className="text-lg text-gray-600 max-w-xl mx-auto md:mx-0">
+        {service.description}
+      </p>
+      <button className="inline-block bg-black text-white px-6 py-3 rounded-full font-medium hover:bg-gray-800 transition duration-300">
+        {service.cta}
+      </button>
+    </div>
+  );
+}
+
 
 export default Services
